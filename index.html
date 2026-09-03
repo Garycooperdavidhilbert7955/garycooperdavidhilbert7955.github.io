@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>실시간 지표</title>
+  <title>실시간 지표 대시보드</title>
   <style>
     body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
     h1 { text-align: center; margin-bottom: 30px; }
@@ -11,23 +11,26 @@
     .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
     .card h3 { margin-top: 0; color: #2c3e50; font-size: 18px; margin-bottom: 15px;}
     .full-width { grid-column: 1 / -1; }
+    .poll-source { text-align: right; font-size: 12px; color: #888; margin-top: 10px; }
     @media (max-width: 600px) { .grid-container { grid-template-columns: 1fr; } }
   </style>
+  <!-- 그래프를 그리기 위한 Chart.js 라이브러리 불러오기 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <h1>📊 실시간 지표</h1>
+  <h1>📊 실시간 지표 대시보드</h1>
 
   <div class="grid-container">
-    <!-- 코스피 위젯 (네이버 데이터 + 30초 갱신 안전모드) -->
+    <!-- 코스피 위젯 (네이버 실시간 + 30초 갱신) -->
     <div class="card">
       <h3>코스피 (KOSPI)</h3>
       <div id="kospi-number" style="margin-top: 5px; margin-bottom: 15px; font-family: sans-serif;">수치 로딩중...</div>
       <img id="kospi-chart" src="https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png" alt="실시간 코스피 차트" style="width: 100%; border-radius: 4px;">
-      <div style="text-align: right; font-size: 12px; color: #888; margin-top: 10px;">* 네이버 증권 실시간 연동 (30초 갱신)</div>
+      <div class="poll-source">* 네이버 증권 실시간 연동</div>
     </div>
 
-    <!-- 환율 위젯 (정상 작동) -->
+    <!-- 환율 위젯 (트레이딩뷰) -->
     <div class="card">
       <h3>환율 (USD/KRW)</h3>
       <div class="tradingview-widget-container">
@@ -48,29 +51,18 @@
       </div>
     </div>
 
-    <!-- 지지율 뉴스 영역 (한국갤럽) -->
-    <div class="card">
-      <h3>📈 한국갤럽 지지율 뉴스</h3>
-      <div style="margin-top: 15px; font-size: 14px; color: #555;">
-        <ul id="news-list-gallup" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li>한국갤럽 뉴스 불러오는 중...</li>
-        </ul>
+    <!-- 지지율 추이 그래프 영역 (전체 너비 사용) -->
+    <div class="card full-width">
+      <h3>📈 대통령 국정 지지율 추이</h3>
+      <div style="height: 300px; width: 100%;">
+        <canvas id="poll-chart"></canvas>
       </div>
-    </div>
-
-    <!-- 지지율 뉴스 영역 (리얼미터) -->
-    <div class="card">
-      <h3>📈 리얼미터 지지율 뉴스</h3>
-      <div style="margin-top: 15px; font-size: 14px; color: #555;">
-        <ul id="news-list-realmeter" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li>리얼미터 뉴스 불러오는 중...</li>
-        </ul>
-      </div>
+      <div class="poll-source">* 구글 스프레드시트 수동 입력 데이터 연동</div>
     </div>
   </div>
 
   <script>
-    // 1. 코스피 데이터 가져오기 (30초마다 자동 갱신으로 서버 차단 방지)
+    // 1. 코스피 데이터 가져오기 (30초마다 자동 갱신)
     function updateKospi() {
       const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
       fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl + '&nocache=' + Date.now())
@@ -91,38 +83,75 @@
              
           document.getElementById('kospi-chart').src = 'https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png?' + Date.now();
         })
-        .catch(err => console.log("코스피 데이터 갱신 대기 중..."));
+        .catch(err => console.log("코스피 갱신 대기 중..."));
     }
 
     updateKospi();
-    setInterval(updateKospi, 30000); // 30000 밀리초(30초)로 늘려서 안정성 확보
+    setInterval(updateKospi, 30000);
 
-    // 2. 구글 뉴스 실시간 가져오기 (지지율)
-    function fetchNews(keyword, elementId) {
-      const rssUrl = 'https://news.google.com/rss/search?q=' + encodeURIComponent(keyword) + '&hl=ko&gl=KR&ceid=KR:ko';
-      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+    // 2. 구글 시트에서 데이터 가져와서 그래프 그리기
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcrpXqyXnwBL7AJ7K51EtGS64VAVHzPGswF-dCXE9LVMFSZZS040xdhkrqkyrccJs1LbGYRvetNIgm/pub?output=csv';
+    
+    fetch(sheetUrl)
+      .then(res => res.text())
+      .then(csv => {
+        const rows = csv.split('\n').filter(row => row.trim() !== '');
+        const labels = [];
+        const posData = [];
+        const negData = [];
 
-      fetch(apiUrl)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'ok') {
-            const items = data.items.slice(0, 5); 
-            let newsHtml = '';
-            items.forEach(item => {
-              newsHtml += `<li><a href="${item.link}" target="_blank" style="color: #2c3e50; text-decoration: none;">${item.title}</a></li>`;
-            });
-            document.getElementById(elementId).innerHTML = newsHtml;
-          } else {
-            document.getElementById(elementId).innerHTML = "<li>뉴스를 불러오지 못했습니다.</li>";
+        rows.forEach((row, index) => {
+          if (index === 0) return; // 첫 번째 줄(제목)은 건너뜀
+          const cols = row.split(',');
+          if (cols.length >= 3) {
+            labels.push(cols[0].trim()); // A열: 날짜
+            posData.push(parseFloat(cols[1].trim())); // B열: 긍정 수치
+            negData.push(parseFloat(cols[2].trim())); // C열: 부정 수치
           }
-        })
-        .catch(err => {
-          document.getElementById(elementId).innerHTML = "<li>뉴스 로딩 중 오류가 발생했습니다.</li>";
         });
-    }
 
-    fetchNews('대통령 지지율 한국갤럽', 'news-list-gallup');
-    fetchNews('대통령 지지율 리얼미터', 'news-list-realmeter');
+        // Chart.js를 이용해 선 그래프 그리기
+        const ctx = document.getElementById('poll-chart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '긍정 평가 (%)',
+                data: posData,
+                borderColor: '#d32f2f', // 빨간색 선
+                backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#d32f2f',
+                tension: 0.3,
+                fill: true
+              },
+              {
+                label: '부정 평가 (%)',
+                data: negData,
+                borderColor: '#1976d2', // 파란색 선
+                backgroundColor: 'rgba(25, 118, 210, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#1976d2',
+                tension: 0.3,
+                fill: true
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { min: 0, max: 100 } // Y축은 0%부터 100%까지 고정
+            },
+            plugins: {
+              legend: { position: 'bottom' } // 범례(설명)를 아래쪽으로 배치
+            }
+          }
+        });
+      })
+      .catch(err => console.log("그래프 데이터를 불러오는 데 실패했습니다."));
   </script>
 </body>
 </html>
