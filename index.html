@@ -88,28 +88,34 @@
           document.getElementById('poll-data').innerHTML = "데이터를 불러오는 데 실패했습니다. 링크를 다시 확인해주세요.";
         });
     }
-fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/^KS11'))
-      .then(res => res.json())
-      .then(data => {
-        const yfData = JSON.parse(data.contents);
-        const meta = yfData.chart.result[0].meta;
-        const price = meta.regularMarketPrice.toFixed(2);
-        const prevClose = meta.chartPreviousClose;
-        const change = (price - prevClose).toFixed(2);
-        const changePct = ((change / prevClose) * 100).toFixed(2);
-        
-        let color = '#333';
-        let sign = '';
-        if (change > 0) { color = '#d32f2f'; sign = '+'; } // 상승: 빨간색
-        else if (change < 0) { color = '#1976d2'; } // 하락: 파란색
-        
-        document.getElementById('kospi-number').innerHTML = 
-          `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
-           <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${sign}${changePct}%)</span>`;
-      })
-      .catch(err => {
-        document.getElementById('kospi-number').innerHTML = "수치를 불러오지 못했습니다.";
-      });    
+// 실시간 코스피 수치 가져오기 (10초마다 자동 갱신)
+    function updateKospi() {
+      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/^KS11'))
+        .then(res => res.json())
+        .then(data => {
+          const yfData = JSON.parse(data.contents);
+          const meta = yfData.chart.result[0].meta;
+          const price = meta.regularMarketPrice.toFixed(2);
+          const prevClose = meta.chartPreviousClose;
+          const change = (price - prevClose).toFixed(2);
+          const changePct = ((change / prevClose) * 100).toFixed(2);
+          
+          let color = '#333';
+          let sign = '';
+          if (change > 0) { color = '#d32f2f'; sign = '+'; } // 상승
+          else if (change < 0) { color = '#1976d2'; } // 하락
+          
+          document.getElementById('kospi-number').innerHTML = 
+            `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
+             <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${sign}${changePct}%)</span>`;
+        })
+        .catch(err => {
+          console.log("코스피 데이터 갱신 지연");
+        });
+    }
+
+    updateKospi(); // 홈페이지를 열자마자 1번 바로 실행
+    setInterval(updateKospi, 10000); // 이후 10초(10000ms)마다 자동으로 반복 실행  
   </script>
 </body>
 </html>
