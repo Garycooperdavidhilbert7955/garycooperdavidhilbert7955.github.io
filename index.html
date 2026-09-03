@@ -56,49 +56,25 @@
 
     <!-- 지지율 영역 -->
     <div class="card full-width">
-      <h3>📈 국정 및 정당 지지율</h3>
-      <div id="poll-data">데이터를 불러오는 중입니다...</div>
+      <h3>📈 국정 및 정당 지지율 최신 뉴스</h3>
+      <div style="margin-top: 15px; font-size: 14px; color: #555;">
+        <ul id="news-list" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+          <li>뉴스 불러오는 중...</li>
+        </ul>
+      </div>
+      <div class="poll-source">* 구글 뉴스 실시간 연동 (한국갤럽 지지율)</div>
     </div>
   </div>
 
   <script>
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcrpXqyXnwBL7AJ7K51EtGS64VAVHzPGswF-dCXE9LVMFSZZS040xdhkrqkyrccJs1LbGYRvetNIgm/pub?output=csv';
-
-    if(sheetUrl !== '여기에_복사한_링크_붙여넣기') {
-      fetch(sheetUrl)
-        .then(res => res.text())
-        .then(csv => {
-          const rows = csv.split('\n').filter(row => row.trim() !== '');
-          let tableHtml = '<table>';
-          
-          rows.forEach((row, index) => {
-            const cols = row.split(','); 
-            tableHtml += '<tr>';
-            cols.forEach(col => {
-              if(index === 0) tableHtml += `<th>${col.trim()}</th>`;
-              else tableHtml += `<td>${col.trim()}</td>`;
-            });
-            tableHtml += '</tr>';
-          });
-          
-          tableHtml += '</table><div class="poll-source">* 구글 스프레드시트와 실시간 연동됨</div>';
-          document.getElementById('poll-data').innerHTML = tableHtml;
-        })
-        .catch(err => {
-          document.getElementById('poll-data').innerHTML = "데이터를 불러오는 데 실패했습니다. 링크를 다시 확인해주세요.";
-        });
-    } 
-// 네이버 실시간 코스피 수치 및 차트 가져오기 (10초 자동 갱신)
+    // 네이버 실시간 코스피 수치 및 차트 가져오기 (10초 자동 갱신)
     function updateKospi() {
       const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
-      
-      // 막히지 않는 안정적인 전용 서버(Codetabs)로 통로 교체
       fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl)
         .then(res => res.json())
         .then(data => {
-          // 데이터를 바로 뽑아옵니다
           const price = data.closePrice; 
-          const change = data.compareToPreviousClosePrice.replace('+', ''); // 혹시 모를 + 기호 제거
+          const change = data.compareToPreviousClosePrice.replace('+', '');
           const changePct = data.fluctuationsRatio.replace('+', '');
           
           let color = '#333';
@@ -110,17 +86,41 @@
             `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
              <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${sign}${changePct}%)</span>`;
              
-          // 10초마다 차트 이미지도 최신으로 갱신
           document.getElementById('kospi-chart').src = 'https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png?' + Date.now();
         })
+        .catch(err => console.log("코스피 데이터 갱신 지연"));
+    }
+
+    updateKospi();
+    setInterval(updateKospi, 10000);
+
+    // 구글 뉴스 실시간 가져오기 (지지율 관련)
+    function fetchNews() {
+      // 구글 뉴스에서 '대통령 지지율 한국갤럽'을 검색한 결과를 가져옵니다.
+      const rssUrl = 'https://news.google.com/rss/search?q=대통령+지지율+한국갤럽&hl=ko&gl=KR&ceid=KR:ko';
+      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+
+      fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            const items = data.items.slice(0, 5); // 최신 뉴스 5개만 자르기
+            let newsHtml = '';
+            items.forEach(item => {
+              // 뉴스 제목과 링크를 리스트 형태로 만듭니다.
+              newsHtml += `<li><a href="${item.link}" target="_blank" style="color: #2c3e50; text-decoration: none;">${item.title}</a></li>`;
+            });
+            document.getElementById('news-list').innerHTML = newsHtml;
+          } else {
+            document.getElementById('news-list').innerHTML = "<li>뉴스를 불러오지 못했습니다.</li>";
+          }
+        })
         .catch(err => {
-          // 실패하더라도 '수치 로딩중...'으로 리셋되지 않고 이전 숫자를 유지하며 뒤에서 재시도합니다.
-          console.log("서버 통신 지연, 재시도 대기중...");
+          document.getElementById('news-list').innerHTML = "<li>뉴스 로딩 중 오류가 발생했습니다.</li>";
         });
     }
 
-    updateKospi(); // 홈페이지를 열자마자 1번 바로 실행
-    setInterval(updateKospi, 10000); // 이후 10초마다 자동으로 반복 실행   
+    fetchNews(); // 사이트 열릴 때 1번 실행
   </script>
 </body>
 </html>
