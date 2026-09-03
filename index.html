@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나만의 경제 지표 대시보드</title>
+  <style>
+    body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+    .card h3 { margin-top: 0; color: #2c3e50; font-size: 18px; }
+    .full-width { grid-column: 1 / -1; }
+    @media (max-width: 600px) { .grid-container { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <h1>📊 실시간 대시보드</h1>
+
+  <div class="grid-container">
+    <!-- 코스피 위젯 -->
+    <div class="card">
+      <h3>코스피 (KOSPI)</h3>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {
+        "symbol": "KRX:KOSPI",
+        "width": "100%",
+        "height": "220",
+        "locale": "kr",
+        "dateRange": "1M",
+        "colorTheme": "light",
+        "isTransparent": true,
+        "autosize": false,
+        "largeChartUrl": ""
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- 환율 위젯 -->
+    <div class="card">
+      <h3>환율 (USD/KRW)</h3>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {
+        "symbol": "FX_IDC:USDKRW",
+        "width": "100%",
+        "height": "220",
+        "locale": "kr",
+        "dateRange": "1M",
+        "colorTheme": "light",
+        "isTransparent": true,
+        "autosize": false,
+        "largeChartUrl": ""
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- 지지율 영역 (다음 단계 준비용) -->
+    <div class="card full-width" style="text-align: center; padding: 40px 20px;">
+      <h3>국정 및 정당 지지율</h3>
+      <p style="color: #7f8c8d;">이 공간은 다음 단계에서 구글 스프레드시트와 연결하여 데이터를 표시할 자리입니다.</p>
+    </div>
+  </div>
+
+</body>
+</html>
