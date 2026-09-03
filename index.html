@@ -91,32 +91,36 @@
 // 네이버 실시간 코스피 수치 및 차트 가져오기 (10초 자동 갱신)
     function updateKospi() {
       const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
-      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&nocache=' + Date.now())
+      
+      // 막히지 않는 안정적인 전용 서버(Codetabs)로 통로 교체
+      fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl)
         .then(res => res.json())
         .then(data => {
-          const parsed = JSON.parse(data.contents);
-          const price = parsed.closePrice; 
-          const change = parsed.compareToPreviousClosePrice;
-          const changePct = parsed.fluctuationsRatio;
+          // 데이터를 바로 뽑아옵니다
+          const price = data.closePrice; 
+          const change = data.compareToPreviousClosePrice.replace('+', ''); // 혹시 모를 + 기호 제거
+          const changePct = data.fluctuationsRatio.replace('+', '');
           
           let color = '#333';
           let sign = '';
-          // 등락률이 양수인지 음수인지 확인하여 색상 결정
           if (parseFloat(changePct) > 0) { color = '#d32f2f'; sign = '+'; }
           else if (parseFloat(changePct) < 0) { color = '#1976d2'; }
           
           document.getElementById('kospi-number').innerHTML = 
             `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
-             <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${changePct}%)</span>`;
+             <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${sign}${changePct}%)</span>`;
              
           // 10초마다 차트 이미지도 최신으로 갱신
           document.getElementById('kospi-chart').src = 'https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png?' + Date.now();
         })
-        .catch(err => console.log("코스피 데이터 갱신 지연"));
+        .catch(err => {
+          // 실패하더라도 '수치 로딩중...'으로 리셋되지 않고 이전 숫자를 유지하며 뒤에서 재시도합니다.
+          console.log("서버 통신 지연, 재시도 대기중...");
+        });
     }
 
     updateKospi(); // 홈페이지를 열자마자 1번 바로 실행
-    setInterval(updateKospi, 10000); // 이후 10초마다 자동으로 반복 실행    
+    setInterval(updateKospi, 10000); // 이후 10초마다 자동으로 반복 실행   
   </script>
 </body>
 </html>
