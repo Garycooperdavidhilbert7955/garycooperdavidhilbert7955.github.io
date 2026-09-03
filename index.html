@@ -26,9 +26,11 @@
 
   <div class="grid-container">
     <!-- 코스피 위젯 -->
-    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-      <h3 style="padding: 20px 20px 0 20px;">코스피 (KOSPI)</h3>
-      <iframe src="https://finance.naver.com/sise/sise_index.naver?code=KOSPI" width="100%" height="280" frameborder="0" scrolling="no" style="margin-top: -30px;"></iframe>
+    <div class="card">
+      <h3>코스피 (KOSPI)</h3>
+      <div id="kospi-number" style="margin-top: 5px; margin-bottom: 15px; font-family: sans-serif;">수치 로딩중...</div>
+      <img id="kospi-chart" src="https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png" alt="실시간 코스피 차트" style="width: 100%; border-radius: 4px;">
+      <div style="text-align: right; font-size: 12px; color: #888; margin-top: 10px;">* 네이버 증권 실시간 연동</div>
     </div>
 
     <!-- 환율 위젯 -->
@@ -86,6 +88,35 @@
           document.getElementById('poll-data').innerHTML = "데이터를 불러오는 데 실패했습니다. 링크를 다시 확인해주세요.";
         });
     } 
+// 네이버 실시간 코스피 수치 및 차트 가져오기 (10초 자동 갱신)
+    function updateKospi() {
+      const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
+      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&nocache=' + Date.now())
+        .then(res => res.json())
+        .then(data => {
+          const parsed = JSON.parse(data.contents);
+          const price = parsed.closePrice; 
+          const change = parsed.compareToPreviousClosePrice;
+          const changePct = parsed.fluctuationsRatio;
+          
+          let color = '#333';
+          let sign = '';
+          // 등락률이 양수인지 음수인지 확인하여 색상 결정
+          if (parseFloat(changePct) > 0) { color = '#d32f2f'; sign = '+'; }
+          else if (parseFloat(changePct) < 0) { color = '#1976d2'; }
+          
+          document.getElementById('kospi-number').innerHTML = 
+            `<span style="font-size: 28px; font-weight: bold; color: ${color};">${price}</span> 
+             <span style="font-size: 15px; color: ${color}; margin-left: 8px;">${sign}${change} (${changePct}%)</span>`;
+             
+          // 10초마다 차트 이미지도 최신으로 갱신
+          document.getElementById('kospi-chart').src = 'https://ssl.pstatic.net/imgfinance/chart/main/KOSPI.png?' + Date.now();
+        })
+        .catch(err => console.log("코스피 데이터 갱신 지연"));
+    }
+
+    updateKospi(); // 홈페이지를 열자마자 1번 바로 실행
+    setInterval(updateKospi, 10000); // 이후 10초마다 자동으로 반복 실행    
   </script>
 </body>
 </html>
