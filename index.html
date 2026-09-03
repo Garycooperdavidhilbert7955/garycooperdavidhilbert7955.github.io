@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>나만의 경제/정치 지표 대시보드</title>
+  <title>실시간 주요 지표</title>
   <style>
     body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
     h1 { text-align: center; margin-bottom: 30px; }
@@ -18,11 +18,11 @@
 </head>
 <body>
 
-  <h1>📊 실시간 대시보드</h1>
+  <h1>📊 실시간 주요 지표</h1>
 
   <div class="grid-container">
     
-    <!-- 첫 번째 줄: 경제 지표 (코스피, 환율) -->
+    <!-- 1층: 경제 지표 (코스피, 환율) -->
     <div class="card">
       <h3>코스피 (KOSPI)</h3>
       <div id="kospi-number" style="margin-top: 5px; margin-bottom: 15px; font-family: sans-serif;">수치 로딩중...</div>
@@ -50,16 +50,25 @@
       </div>
     </div>
 
-    <!-- 두 번째 줄: 정치 지표 그래프 (가로 전체 차지) -->
+    <!-- 2층: 대통령 국정 지지율 그래프 -->
     <div class="card full-width">
       <h3>📈 대통령 국정 지지율 추이</h3>
       <div style="height: 300px; width: 100%;">
-        <canvas id="poll-chart"></canvas>
+        <canvas id="poll-chart-president"></canvas>
       </div>
-      <div class="poll-source">* 구글 스프레드시트 연동 (수동 입력 데이터)</div>
+      <div class="poll-source">* 구글 스프레드시트 연동 (B열, C열)</div>
     </div>
 
-    <!-- 세 번째 줄: 뉴스 게시판 (한국갤럽, 리얼미터) -->
+    <!-- 3층: 정당 지지율 그래프 (새로 추가됨) -->
+    <div class="card full-width">
+      <h3>📈 주요 정당 지지율 추이</h3>
+      <div style="height: 300px; width: 100%;">
+        <canvas id="poll-chart-party"></canvas>
+      </div>
+      <div class="poll-source">* 구글 스프레드시트 연동 (D열, E열)</div>
+    </div>
+
+    <!-- 4층: 뉴스 게시판 (한국갤럽, 리얼미터) -->
     <div class="card">
       <h3>📰 한국갤럽 지지율 뉴스</h3>
       <div style="margin-top: 15px; font-size: 14px; color: #555;">
@@ -81,7 +90,7 @@
   </div> <!-- grid-container 종료 -->
 
   <script>
-    // 1. 코스피 가져오기 (30초 자동 갱신)
+    // 1. 코스피 가져오기
     function updateKospi() {
       const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
       fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl + '&nocache=' + Date.now())
@@ -132,10 +141,10 @@
         });
     }
 
-    fetchNews('지지율 한국갤럽', 'news-list-gallup');
-    fetchNews('지지율 리얼미터', 'news-list-realmeter');
+    fetchNews('한국갤럽 지지율', 'news-list-gallup');
+    fetchNews('리얼미터 지지율', 'news-list-realmeter');
 
-    // 3. 지지율 그래프 그리기 (구글 스프레드시트 연동)
+    // 3. 지지율 그래프 2개 그리기 (구글 스프레드시트 연동)
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcrpXqyXnwBL7AJ7K51EtGS64VAVHzPGswF-dCXE9LVMFSZZS040xdhkrqkyrccJs1LbGYRvetNIgm/pub?output=csv';
     
     fetch(sheetUrl)
@@ -143,8 +152,10 @@
       .then(csv => {
         const rows = csv.split('\n').filter(row => row.trim() !== '');
         const labels = [];
-        const posData = [];
-        const negData = [];
+        const posData = []; // 대통령 긍정 (B열)
+        const negData = []; // 대통령 부정 (C열)
+        const partyAData = []; // 국민의힘 (D열)
+        const partyBData = []; // 더불어민주당 (E열)
 
         rows.forEach((row, index) => {
           if (index === 0) return; 
@@ -154,47 +165,41 @@
             posData.push(parseFloat(cols[1].trim())); 
             negData.push(parseFloat(cols[2].trim())); 
           }
+          // D열, E열에 데이터가 있으면 정당 지지율 배열에 추가
+          if (cols.length >= 5) {
+            partyAData.push(parseFloat(cols[3].trim())); 
+            partyBData.push(parseFloat(cols[4].trim())); 
+          }
         });
 
-        const ctx = document.getElementById('poll-chart').getContext('2d');
-        new Chart(ctx, {
+        // 3-1. 대통령 지지율 그래프 렌더링
+        const ctxPresident = document.getElementById('poll-chart-president').getContext('2d');
+        new Chart(ctxPresident, {
           type: 'line',
           data: {
             labels: labels,
             datasets: [
-              {
-                label: '긍정 평가 (%)',
-                data: posData,
-                borderColor: '#d32f2f',
-                backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                borderWidth: 2,
-                pointBackgroundColor: '#d32f2f',
-                tension: 0.3,
-                fill: true
-              },
-              {
-                label: '부정 평가 (%)',
-                data: negData,
-                borderColor: '#1976d2',
-                backgroundColor: 'rgba(25, 118, 210, 0.1)',
-                borderWidth: 2,
-                pointBackgroundColor: '#1976d2',
-                tension: 0.3,
-                fill: true
-              }
+              { label: '긍정 평가 (%)', data: posData, borderColor: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
+              { label: '부정 평가 (%)', data: negData, borderColor: '#1976d2', backgroundColor: 'rgba(25, 118, 210, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
             ]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: { min: 0, max: 100 }
-            },
-            plugins: {
-              legend: { position: 'bottom' }
-            }
-          }
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
         });
+
+        // 3-2. 정당 지지율 그래프 렌더링
+        const ctxParty = document.getElementById('poll-chart-party').getContext('2d');
+        new Chart(ctxParty, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              { label: '국민의힘 (%)', data: partyAData, borderColor: '#e61e2b', backgroundColor: 'rgba(230, 30, 43, 0.1)', borderWidth: 2, tension: 0.3, fill: true },
+              { label: '더불어민주당 (%)', data: partyBData, borderColor: '#004ea2', backgroundColor: 'rgba(0, 78, 162, 0.1)', borderWidth: 2, tension: 0.3, fill: true }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
+        });
+
       })
       .catch(err => console.log("그래프 데이터를 불러오는 데 실패했습니다."));
   </script>
