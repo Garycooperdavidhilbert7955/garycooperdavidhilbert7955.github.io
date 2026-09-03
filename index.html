@@ -54,20 +54,29 @@
       </div>
     </div>
 
-    <!-- 지지율 영역 -->
-    <div class="card full-width">
-      <h3>📈 국정 및 정당 지지율 최신 뉴스</h3>
+    <!-- 지지율 뉴스 영역 (한국갤럽) -->
+    <div class="card">
+      <h3>📈 한국갤럽 지지율 뉴스</h3>
       <div style="margin-top: 15px; font-size: 14px; color: #555;">
-        <ul id="news-list" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
-          <li>뉴스 불러오는 중...</li>
+        <ul id="news-list-gallup" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+          <li>한국갤럽 뉴스 불러오는 중...</li>
         </ul>
       </div>
-      <div class="poll-source">* 구글 뉴스 실시간 연동 (한국갤럽 지지율)</div>
     </div>
-  </div>
+
+    <!-- 지지율 뉴스 영역 (리얼미터) -->
+    <div class="card">
+      <h3>📈 리얼미터 지지율 뉴스</h3>
+      <div style="margin-top: 15px; font-size: 14px; color: #555;">
+        <ul id="news-list-realmeter" style="list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+          <li>리얼미터 뉴스 불러오는 중...</li>
+        </ul>
+      </div>
+    </div>
+  </div> <!-- grid-container 종료 -->
 
   <script>
-    // 네이버 실시간 코스피 수치 및 차트 가져오기 (10초 자동 갱신)
+    // 1. 코스피 실시간 스크립트
     function updateKospi() {
       const targetUrl = 'https://m.stock.naver.com/api/index/KOSPI/basic';
       fetch('https://api.codetabs.com/v1/proxy?quest=' + targetUrl)
@@ -94,33 +103,33 @@
     updateKospi();
     setInterval(updateKospi, 10000);
 
-    // 구글 뉴스 실시간 가져오기 (지지율 관련)
-    function fetchNews() {
-      // 구글 뉴스에서 '대통령 지지율 한국갤럽'을 검색한 결과를 가져옵니다.
-      const rssUrl = 'https://news.google.com/rss/search?q=대통령+지지율+한국갤럽&hl=ko&gl=KR&ceid=KR:ko';
+    // 2. 구글 뉴스 실시간 가져오기 (검색어 자동화 함수)
+    function fetchNews(keyword, elementId) {
+      const rssUrl = 'https://news.google.com/rss/search?q=' + encodeURIComponent(keyword) + '&hl=ko&gl=KR&ceid=KR:ko';
       const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
 
       fetch(apiUrl)
         .then(res => res.json())
         .then(data => {
           if (data.status === 'ok') {
-            const items = data.items.slice(0, 5); // 최신 뉴스 5개만 자르기
+            const items = data.items.slice(0, 5); // 최신 뉴스 5개만
             let newsHtml = '';
             items.forEach(item => {
-              // 뉴스 제목과 링크를 리스트 형태로 만듭니다.
               newsHtml += `<li><a href="${item.link}" target="_blank" style="color: #2c3e50; text-decoration: none;">${item.title}</a></li>`;
             });
-            document.getElementById('news-list').innerHTML = newsHtml;
+            document.getElementById(elementId).innerHTML = newsHtml;
           } else {
-            document.getElementById('news-list').innerHTML = "<li>뉴스를 불러오지 못했습니다.</li>";
+            document.getElementById(elementId).innerHTML = "<li>뉴스를 불러오지 못했습니다.</li>";
           }
         })
         .catch(err => {
-          document.getElementById('news-list').innerHTML = "<li>뉴스 로딩 중 오류가 발생했습니다.</li>";
+          document.getElementById(elementId).innerHTML = "<li>뉴스 로딩 중 오류가 발생했습니다.</li>";
         });
     }
 
-    fetchNews(); // 사이트 열릴 때 1번 실행
+    // 한국갤럽과 리얼미터 검색어로 각각 뉴스를 불러와 화면에 뿌려줍니다.
+    fetchNews('대통령 지지율 한국갤럽', 'news-list-gallup');
+    fetchNews('대통령 지지율 리얼미터', 'news-list-realmeter');
   </script>
 </body>
 </html>
