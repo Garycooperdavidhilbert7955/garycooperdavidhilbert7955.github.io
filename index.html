@@ -90,7 +90,8 @@
     }
 // 실시간 코스피 수치 가져오기 (10초마다 자동 갱신)
     function updateKospi() {
-      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/^KS11'))
+      const targetUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/^KS11?nocache=' + Date.now();
+      fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl))
         .then(res => res.json())
         .then(data => {
           const yfData = JSON.parse(data.contents);
